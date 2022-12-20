@@ -1,14 +1,14 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <IntCtrl_Cfgh.h>
+ *         File:  <Compiler.h>
  *       Module:  -
  *
- *  Description:  <Write File DESCRIPTION here>     
+ *  Description:  <Compiler Dependent MACRO Defination>     
  *  
  *********************************************************************************************************************/
-#ifndef <INTCTRL_CFGH_H>
-#define <INTCTRL_CFGH_H>
+#ifndef <Compiler_H>
+#define <COMPILER_H>
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -18,7 +18,19 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-
+ //NULL_PTR define with a void pointer to zero definition
+ #define NULL_PTR         ((void *)0)
+ 
+ //INLINE define for abstraction of the keyword inline
+ #define INLINE    inline
+ 
+ /*
+	LOCAL_INLINE define the abstraction of the keyword inline in the 
+	function with "static" scope. Different compilers may require a 
+	different sequence of the keywords "static" and "inline" if this 
+	is supposed at all
+	*/
+	#define LOCAL_INLINE     static inline
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -33,22 +45,14 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
-/*
-    Choose Grouping and Sub-Grouping system from:
-    PRIORITY_GROUPING_SYSTEM_XXX       [0:7]  GROUPS      [0]    SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XXY       [0:3]  GROUPS      [0:1]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XYY       [0:1]  GROUPS      [0:3]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_YYY       [0]    GROUPS      [0:7]  SUBGRROUPS
-*/
 
-#define PRIORITY_GROUPING_SYSTEM       PRIORITY_GROUPING_SYSTEM_XXX  
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
 
  
-#endif  /* INTCTRL_CFGH_H */
+#endif  /* COMPILER_H */
 
 /**********************************************************************************************************************
  *  END OF FILE: Std_Types.h

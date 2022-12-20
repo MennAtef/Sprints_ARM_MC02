@@ -1,14 +1,14 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <IntCtrl_Cfgh.h>
+ *         File:  <Platform_Types.h>
  *       Module:  -
  *
- *  Description:  <Write File DESCRIPTION here>     
+ *  Description:  <Types taht depends on platform -CortexM4>     
  *  
  *********************************************************************************************************************/
-#ifndef <INTCTRL_CFGH_H>
-#define <INTCTRL_CFGH_H>
+#ifndef <PLATFORM_TYPES_H>
+#define <PLATFORM_TYPES_H>
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -18,8 +18,27 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
+#define WORD_LENGTH_BITS             32
+#define WORD_LENGTH_BYTES            4
+//Big endian byte ordering
+#define MSB_FIRST                    0
+//Little endian byte ordering 
+#define LSB_FIRST                    1
 
+#ifndef    TRUE
+	#define TRUE    1
+#endif
 
+#ifndef    FALSE
+	#define FALSE    0
+#endif
+
+#define ENABLE       1
+#define DISABLE      0
+//Little endian bit ordering
+#define CPU_BIT_ORDER    LSB_FIRST 
+//Little endian byte ordering
+#define CPU_BIT_ORDER    LOW_BYTE_FIRST 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
  *********************************************************************************************************************/
@@ -28,27 +47,33 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
+typedef unsigned char          boolean;
 
+typedef signed char            sint8;
+typedef unsigned char          uint8;
+typedef signed short           sint16;
+typedef unsigned short         uint16;
+typedef unsigned long          uint32;
+typedef signed long            sint32;
 
+typedef float                  float32;
+typedef double                 float64;
+
+#ifdef PLATFORM_SUPPORT_SIN64_UINT64
+	typedef signed long long   sin64;
+	typedef unsigned long long uin64;
+#endif
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
-/*
-    Choose Grouping and Sub-Grouping system from:
-    PRIORITY_GROUPING_SYSTEM_XXX       [0:7]  GROUPS      [0]    SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XXY       [0:3]  GROUPS      [0:1]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XYY       [0:1]  GROUPS      [0:3]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_YYY       [0]    GROUPS      [0:7]  SUBGRROUPS
-*/
 
-#define PRIORITY_GROUPING_SYSTEM       PRIORITY_GROUPING_SYSTEM_XXX  
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
 
  
-#endif  /* INTCTRL_CFGH_H */
+#endif  /* PLATFORM_TYPES_H */
 
 /**********************************************************************************************************************
  *  END OF FILE: Std_Types.h

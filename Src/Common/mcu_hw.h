@@ -1,25 +1,32 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <IntCtrl_Cfgh.h>
+ *         File:  <mcu_hw.h>
  *       Module:  -
  *
- *  Description:  <Write File DESCRIPTION here>     
+ *  Description:  <Contains all MCU Regiesters Definitions>     
  *  
  *********************************************************************************************************************/
-#ifndef <INTCTRL_CFGH_H>
-#define <INTCTRL_CFGH_H>
+#ifndef <MCU_HW_H>
+#define <MCU_HW_H>
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-
+#include "Std_Types.h"
 
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
+#define CORTEXM4_CORE_PERI_BASE_ADDRESS    0xE000E000
+#define APINT                              *((volatile uint32*)CORTEXM4_CORE_PERI_BASE_ADDRESS+0xD0C)
+#define INTCTRL                            *((volatile INTRCTRL_TAG*)CORTEXM4_CORE_PERI_BASE_ADDRESS+0xD04)
 
+//NVIC REGIESTER
+#define NVIC_ENABLE_BASE_ADDRESS             0xE000E100
+#define NVIC_PRI_BASE_ADDRESS                0xE000E400
 
+#define APINT                     *((volatile uint32*)0xE000ED0C)
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
  *********************************************************************************************************************/
@@ -28,27 +35,42 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
+typedef struct
+{
+    uint32  VECACT    :8;
+    uint32            :3;
+    uint32  PENDSV    :1;
+    uint32  VECPEND   :8;
+    uint32            :2;
+    uint32  ISRPEND   :1;
+    uint32  ISRPRE    :1;
+    uint32            :1;
+    uint32 PENDSTCLR  :1;
+    uint32 PENDSTSET  :1;
+    uint32 UNPENDSV   :1;
+    uint32 PENDSV     :1;
+    uint32            :2;
+    uint32 NMISET     :1;
+}INTCTRL_BITFIELD;
+
+typedef union 
+{ 
+    uint32 R;
+    INTCTRL_BITFIELD B;
+}INTRCTRL_TAG;
 
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
-/*
-    Choose Grouping and Sub-Grouping system from:
-    PRIORITY_GROUPING_SYSTEM_XXX       [0:7]  GROUPS      [0]    SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XXY       [0:3]  GROUPS      [0:1]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_XYY       [0:1]  GROUPS      [0:3]  SUBGRROUPS
-    PRIORITY_GROUPING_SYSTEM_YYY       [0]    GROUPS      [0:7]  SUBGRROUPS
-*/
 
-#define PRIORITY_GROUPING_SYSTEM       PRIORITY_GROUPING_SYSTEM_XXX  
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
 
  
-#endif  /* INTCTRL_CFGH_H */
+#endif  /* MCU_HW_H */
 
 /**********************************************************************************************************************
  *  END OF FILE: Std_Types.h
