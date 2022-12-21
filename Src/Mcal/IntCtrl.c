@@ -54,30 +54,53 @@ static void SetPriorityGrouping();
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-void Nvic_Init(void)
+
+void IntCrtl_Init(void)
 {
-	uint8 LOC_Grp, LOC_SubGrp, LOC_Grp_Field;
-	/*Configure the Grouping and Sub-grouping */
-    APINT = (APINT_VECTKEY << APINT_VECTKEY_FIELD_OFFSET) |
-            (PRIORITY_GROUPING_SYSTEM << PRIORITY_GROUP_FIELD_OFFSET);
+uint8 Counter , Group_Temp , SubGroup_Temp , Interrupt_Number_Temp ,Grouping_Field	;
+uint32 PriRegOffset	,PriBitOffset , EnRegOffset ,EnBitOffset;
+	
+APINT.B.VECTKEY=APINT_VECTKEY; 					 
+APINT.B.ENDIANESS=STD_low;					    
+APINT.B.PRIGROUP = GROUPING_SYSTEM;      
+	
+for(Counter=0 ;Counter < NUM_OF_ACTIVATED_GROUPS;Counter++){
+	
+Interrupt_Number_Temp = Interrupt_Groups[Counter].Interrupt_Number;	
+Group_Temp = Interrupt_Groups[Counter].Group_Priority;
+SubGroup_Temp =	Interrupt_Groups[Counter].SubGroup_Priority;
+	
+EnRegOffset = (Interrupt_Number_Temp/32)*4;
+EnBitOffset = Interrupt_Number_Temp%32;
+	
+(*((volatile uint32*)(NVIC_ENX_BASE_ADDRESS + EnRegOffset  )))|= (1 << EnBitOffset);
+	
+if ( GROUPING_SYSTEM == GROUPING_SYSTEM_XXX)
+	{
+	Grouping_Field=Group_Temp ;
+    }
+else if ( GROUPING_SYSTEM == GROUPING_SYSTEM_XXY)
+	{
+	Grouping_Field=(((Group_Temp<<1)&(0x6))|((SubGroup_Temp)&(0x1)));
+    }
+else if ( GROUPING_SYSTEM == GROUPING_SYSTEM_XYY)
+	{
+	Grouping_Field=(((Group_Temp<<2)&(0x4))|((SubGroup_Temp)&(0x3)));	
+    }
+else if ( GROUPING_SYSTEM == GROUPING_SYSTEM_YYY)
+	{
+	Grouping_Field= SubGroup_Temp ;
+    }
+else
+    {
+    // Do Nothing
+    }
 
-
-
-                      /*Create Group Field*/
-    #if(PRIORITY_GROUPING_SYSTEM == PRIORITY_GROUPING_SYSTEM_XXX)
-            LOC_Grp_Field = LOC_Grp;
-    #elif(PRIORITY_GROUPING_SYSTEM == PRIORITY_GROUPING_SYSTEM_XXY)
-            LOC_Grp_Field = ((LOC_Grp << 1)& 0x6) | (LOC_SubGrp & 0x1);
-    #elif(PRIORITY_GROUPING_SYSTEM == PRIORITY_GROUPING_SYSTEM_XYY)
-            LOC_Grp_Field = ((LOC_Grp << 2)& 0x4) | (LOC_SubGrp & 0x3);
-    #elif(PRIORITY_GROUPING_SYSTEM == PRIORITY_GROUPING_SYSTEM_YYY)
-            LOC_Grp_Field = LOC_Sub_Grp;
-    #else
-            #error WRONG GROUPING CHOICE
-    #endif
+PriRegOffset = (Interrupt_Number_Temp/4)*4;
+PriBitOffset = 5 + (8 * (Interrupt_Number_Temp%4));
+(*((volatile uint32*)(NVIC_PRIX_BASE_ADDRESS + PriRegOffset  ))) |= ((uint32)(Grouping_Field << PriBitOffset));
+}	
 }
-
-
 /**********************************************************************************************************************
- *  END OF FILE: FileName.c
+ *  END OF FILE: IntCtrl.c
  *********************************************************************************************************************/
