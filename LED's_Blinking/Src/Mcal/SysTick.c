@@ -1,10 +1,11 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -----------------------------------------------------------------------------------------------------------------*/
-/**        \file  DIO.c
- *        \brief  
+/**        \file  SysTick.c
+ *        \brief  Nested Vector Interrupt Controller Driver
  *
- *      \details  
+ *      \details  Confiigure all the Mcu interrupts priority into groups and subgroups,
+ *                Enable and Disable Navic Interrupt Gate for Periphrals
  *
  *
  *********************************************************************************************************************/
@@ -12,31 +13,11 @@
 /**********************************************************************************************************************
  *  INCLUDES
  *********************************************************************************************************************/
-#include "Std_Types.h"
-#include "Mcu_Hw.h"
-#include "Platform_Types.h"
-#include "DIO.h"
+#include "SysTick_Cfg.h"
 /**********************************************************************************************************************
 *  LOCAL MACROS CONSTANT\FUNCTION
 *********************************************************************************************************************/
-static const uint32 Port_APB_BaseAddress[6] = 
-{
-	GPIO_PORTA_APB_BASE_ADDRESS,
-	GPIO_PORTB_APB_BASE_ADDRESS,
-	GPIO_PORTC_APB_BASE_ADDRESS,
-	GPIO_PORTD_APB_BASE_ADDRESS,
-	GPIO_PORTE_APB_BASE_ADDRESS,
-	GPIO_PORTF_APB_BASE_ADDRESS};
 
-static const uint32 Port_AHB_BaseAddress[6] = 
-{
-GPIO_PORTA_AHB_BASE_ADDRESS,
-GPIO_PORTB_AHB_BASE_ADDRESS,
-GPIO_PORTC_AHB_BASE_ADDRESS,
-GPIO_PORTD_AHB_BASE_ADDRESS,
-GPIO_PORTE_AHB_BASE_ADDRESS,
-GPIO_PORTF_AHB_BASE_ADDRESS
-};
 /**********************************************************************************************************************
  *  LOCAL DATA 
  *********************************************************************************************************************/
@@ -44,10 +25,74 @@ GPIO_PORTF_AHB_BASE_ADDRESS
 /**********************************************************************************************************************
  *  GLOBAL DATA
  *********************************************************************************************************************/
+
 /**********************************************************************************************************************
  *  LOCAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
+void SysTick_Init(uint8 power_on_duty_cycle)
+{
+    if(INT_STATUS == INT_ENABLE)
+    {
+        NVIC_ST_CTRL |= (1<<1) ;
+    }
+    else
+    {
+       NVIC_ST_CTRL &=~(1<<1) ; 
+    }
 
+    if(CLK_SOURCE == INTRERNAL_CLK)
+    {
+        NVIC_ST_CTRL |= (1<<2) ;
+    }
+    else
+    {
+       NVIC_ST_CTRL &=~(1<<2) ; 
+    }
+
+    NVIC_ST_CURRENT_R = 0;
+	if(power_on_duty_cycle>0 && power_on_duty_cycle<100)
+    {
+		NVIC_ST_RELOAD_R=(16000000-((*duty_cycle)*16000000/100))-1;
+	}
+}
+void SysTick_Handler(void)
+{
+	//TOGGLE THE LED
+		if(power_flag==0)
+        { 
+			SisTick_Stop();
+			NVIC_ST_CURRENT = 0;
+			NVIC_ST_RELOAD=((*duty_cycle)*16000000/100)-1;	 
+			power_flag ^ = 1;		
+	    }
+
+		else
+        {		
+			SisTick_Stop();
+			NVIC_ST_CURRENT = 0;
+			NVIC_ST_RELOAD=(16000000-((*duty_cycle)*16000000/100))-1;	
+			power_flag ^ = 1;
+	    }
+	SysTick_Callback();
+	SysTick_Start();
+}
+void SysTick_Start(void)
+{
+    NVIC_ST_CTRL |= 1 ;
+}
+void SysTick_Stop(void)
+{
+    NVIC_ST_CTRL & = 0xFFFFFFFF ;
+}
+static void (*SysTick_CallBack)(void);
+void Set_SysTick_CallBack_ptr ( void(*ptr)(void))
+{
+    SysTick_CallBack = ptr;
+}
+void Set_SysTick_CallBack_Dutycycle ( uint8 * dutyCycle )
+{
+    duty_cycle = dutyCycle;
+}
 /**********************************************************************************************************************
  *  LOCAL FUNCTIONS
  *********************************************************************************************************************/
@@ -68,38 +113,11 @@ GPIO_PORTF_AHB_BASE_ADDRESS
 * \Return value:   : Std_ReturnType  E_OK
 *                                    E_NOT_OK                                  
 *******************************************************************************/
-Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
-{
 
-	Dio_LevelType level;
-	uint8 portPos, channelPos;
-	portPos = ChannelId / 8;
-	channelPos = ChannelId % 8;
-	uint32 GPIO_DATA = Port_APB_BaseAddress[portPos] +
-     GPIODATA_OFFSET + (4 * (1 << channelPos));
-	level = ((HwAccess(GPIO_DATA) >> channelPos) & 1);
-	return level;
-}
-void Dio_WriteChannel(Dio_ChannelType ChannelId, Dio_LevelType Level)
-{
-    uint8 portPos, channelPos;
-	portPos = ChannelId / 8;
-	channelPos = ChannelId % 8;
-	uint32 GPIO_DATA = Port_APB_BaseAddress[portPos] + GPIODATA_OFFSET + (4 * (1 << channelPos));
-	HwAccess(GPIO_DATA) = ((uint32)(Level << channelPos));
-}
-Dio_PortLevelType Dio_ReadPort(Dio_PortType PortId)
-{
-	Dio_PortLevelType portLevel;
-	uint32 GPIO_DATA = Port_APB_BaseAddress[PortId] + GPIODATA_OFFSET + 0X3FC;
-	portLevel = ((uint8)HwAccess(GPIO_DATA));
-	return portLevel;
-}
-void Dio_WritePort(Dio_PortType PortId, Dio_PortLevelType Level)
-{
-	uint32 GPIO_DATA = Port_APB_BaseAddress[PortId] + GPIODATA_OFFSET + GPIO_ShiftedLeft_2Bits;
-	HwAccess(GPIO_DATA) = Level;
-}
+    
+
+
+
 /**********************************************************************************************************************
- *  END OF FILE: FileName.c
+ *  END OF FILE: SysTick.c
  *********************************************************************************************************************/

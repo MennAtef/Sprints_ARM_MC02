@@ -1,71 +1,39 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <Gpio_Port.h>
+ *         File:  <Write File Name>
  *       Module:  -
  *
  *  Description:  <Write File DESCRIPTION here>     
  *  
  *********************************************************************************************************************/
-#ifndef <GPIO_PORT_H>
-#define <GPIO_PORT_H>
+#ifndef <BUTTON2_CFG_H>
+#define <BUTTON2_CFG_H>
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-#include "Platform_Types.h"
-#include "DIO.h"
+#include "GPIO_cfg.h"
+#include "STD_TYPES.h"
 
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define UNLOCK_KEY 0x4C4F434B
+
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
  *********************************************************************************************************************/
-void Port_Init(const Port_ConfigType *ConfigPtr);
+#define BUTTON2_PORT   PORTC
+#define BUTTON2_PIN    PIN1
+#define BUTTON2_INP    INPUT
+
+#define NOT_PRESSED   1
+#define PRESSED       0
 
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef Dio_ChannelType Port_PinType;
-
-typedef enum
-{
-	PORT_PIN_IN,
-	PORT_PIN_OUT
-} Port_PinDirType;
-
-typedef uint8 Port_PinModeType;
-
-typedef enum
-{
-	DEFAULT,
-	PULLUP,
-	PULLDOWN,
-	OPENDRAIN
-} Port_PinInternalAttachType;
-
-typedef enum
-{
-	CURRENT_NA,
-	CURRENT_2M,
-	CURRENT_4M,
-	CURRENT_8M
-} Port_PinOutCurrentType;
-
-typedef struct
-{
-	Port_PinType Pin;
-	Port_PinDirectionType Dir;
-	Port_PinModeType Mode;
-	Port_PinInternalAttachType Attach;
-	Port_PinOutputCurrentType OutputCurr;
-
-} Port_ConfigType;
-
-#define DIO 0
 
 
 /**********************************************************************************************************************
@@ -78,8 +46,8 @@ typedef struct
  *********************************************************************************************************************/
 
  
-#endif  /* GPIO_PORT_H */
+#endif  /* BUTTON2_CFG_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: Std_Types.h
+ *  END OF FILE: BUTTON2_Cfg.h
  *********************************************************************************************************************/
