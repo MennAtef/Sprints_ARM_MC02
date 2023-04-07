@@ -4,14 +4,14 @@
  *         File:  <DIO.h>
  *     
  *********************************************************************************************************************/
-#ifndef <DIO_H>
-#define <DIO_H>
+#ifndef DIO_H
+#define DIO_H
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-
-
+#include "Nvic.h"
+#include "IntCtrl.h"
 #include "IntCtrl_Cfg.h"
 
 /**********************************************************************************************************************
@@ -29,10 +29,9 @@
 
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
- *********************************************************************************************************************/
+ *********************************************************************************************************************/ 
 typedef enum
 {
-
 	Dio_Channel_A0,
 	Dio_Channel_A1,
 	Dio_Channel_A2,
@@ -118,48 +117,26 @@ typedef enum
 	INPUT = 0,
 	OUTPUT = 1
 }Port_State;
+
 //Define Status type
 typedef enum
 {
 	LOW = 0,
 	HIGH = 1
 }Pin_Status;
-//DUNNO WHAT DOES IT DO
+
 typedef enum
 {
     GPIO = 0,
     ALTERNATIVE = 1
-}ALTERNATIVE_FUNC;
-/*
-typedef enum
-{
-    edge = 0,
-    level = 1
-}INT_SENS;
+}ALTERNATIVE_FUNCTION;
 
 typedef enum
 {
-    one_edge = 0,
-    both_edges = 1
-}Edges;
+	Current_2mA,
+	Current_16mA
+}OUTPUT_CURRENT;
 
-typedef enum
-{
-    rising = 0,
-    falling = 1
-}Event;
-
-typedef enum
-{
-    not_masked = 0,
-    masked = 1
-}INT_Mask;
-*/
-
-
-
-//SETWHICH PORT WILL BE ENABLED SO IIT CAN SET PRIORITY TYPE TO IT
-static PRIORITY GPIO_PRIORITY = PRIORITY_3;
 
 
 

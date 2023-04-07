@@ -4,21 +4,19 @@
  *         File:  <SysTick.h>
  *      
  *********************************************************************************************************************/
-#ifndef <SYSTICK_CFG_H>
-#define <SYSTICK_CFG_H>
+#ifndef SYSTICK_CFG_H
+#define SYSTICK_CFG_H
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-#include "STD_TYPES.h"
+#include "std_types.h"
 #include "GPIO_cfg.h"
 #include "SysTick_Cfg.h"
 
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define INT_STATUS  INT_ENB
-#define CLK_SOURCE  INTRERNAL_CLK
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
  *********************************************************************************************************************/
@@ -27,18 +25,19 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-static uint8 power_flag = 0;
-static uint8* duty_cycle;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/ 
-void SysTick_Init(uint8 power_on_duty_cycle);
+void SysTick_Init(void);
+extern void StartSysTick (uint32 Seconds_ms);
+extern void StopSysTick (void);
+void (*SysTick_CallBack)(void);
+void SysTick_CallBack(void(*pointer)(void));
+void SysTick_CallBack_DC(uint32 * DUTY_CYCLE);
+void SysTick_Handler(void);
 void SysTick_Start(void);
 void SysTick_Stop(void);
-static void (*SysTick_CallBack)(void);
-void Set_SysTick_CallBack_ptr ( void(*ptr)(void));// ptr to app layer function
-void Set_SysTick_CallBack_Dutycycle ( uint8 * dutyCycle )
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/

@@ -7,14 +7,15 @@
  *  Description:  <Write File DESCRIPTION here>     
  *  
  *********************************************************************************************************************/
-#ifndef <GPIO_CFG_H>
-#define <GPIO_CFG_H>
+#ifndef GPIO_CFG_H
+#define GPIO_CFG_H
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-#include "STD_TYPES.h"
-#include "GPIO_Port.h"
+#include "std_types.h"
+#include "TM4C123_Gpio_Port.h"
+#include "platform_types.h"
 #include "DIO.h"
 
 /**********************************************************************************************************************
@@ -35,14 +36,14 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
-void GPIO_Clock_Init(Dio_PortType port);
-void GPIO_Clock_Disable(Dio_PortType port);
-void GPIO_Init(Dio_PortType port,Dio_PinNumber pin,ALTERNATIVE_FUNC FUN);
-void DIO_SetPinDir (Dio_PortType port, Dio_PinNumber pin, Port_State state);
-void DIO_SetPinVal (Dio_PortType port, Dio_PinNumber pin, Pin_Status status);
-uint8 DIO_ReadPinVal (Dio_PortType port, Dio_PinNumber pin);
-uint32 DIO_ReadPortVal(Dio_PortType port);
-void DIO_TogglePinVal (Dio_PortType port, Dio_PinNumber pin);
+void GPIO_Clock_Init(Dio_PortType _PORT_);
+void GPIO_Clock_Disable(Dio_PortType _PORT_);
+void GPIO_Init(Dio_PortType _PORT_,Dio_PinNumber _PIN_, ALTERNATIVE_FUNCTION _Function_);
+void DIO_SetPinDir (Dio_PortType _PORT_, Dio_PinNumber _PIN_, Port_State _STATUS_);
+void DIO_SetPinVal (Dio_PortType _PORT_, Dio_PinNumber _PIN_, Pin_Status _STATE_);
+uint32 DIO_ReadPinVal (Dio_PortType _PORT_, Dio_PinNumber _PIN_);
+uint32 DIO_ReadPortVal(Dio_PortType _PORT_);
+void DIO_TogglePinVal (Dio_PortType _PORT_, Dio_PinNumber _PIN_);
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
